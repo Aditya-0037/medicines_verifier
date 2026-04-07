@@ -2,128 +2,111 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --color-primary: #0052FF;
-  --color-primary-light: #3374FF;
-  --color-primary-dark: #003ACC;
-  --color-success: #00C48C;
-  --color-danger: #FF2D55;
-  --color-warning: #FF9500;
-  --color-surface: #FFFFFF;
-  --color-bg: #F8F9FF;
-  --font-inter: 'Inter', sans-serif;
+@layer base {
+  body {
+    @apply bg-slate-100 text-gray-900 selection:bg-blue-200 selection:text-blue-900;
+    /* Soft neumorphic texture background */
+    background-image: 
+      radial-gradient(at 0% 0%, hsla(210,100%,94%,1) 0, transparent 50%), 
+      radial-gradient(at 50% 0%, hsla(240,100%,94%,1) 0, transparent 50%), 
+      radial-gradient(at 100% 0%, hsla(210,100%,90%,1) 0, transparent 50%);
+    background-attachment: fixed;
+  }
 }
 
-* {
-  box-sizing: border-box;
-  -webkit-tap-highlight-color: transparent;
+@layer components {
+  .glass-card {
+    @apply bg-white/40 backdrop-blur-xl border border-white/60;
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.07);
+  }
+  
+  .glass-card-hover {
+    @apply hover:bg-white/50 transition-all duration-300;
+    &:hover {
+      box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+    }
+  }
+
+  .neumorphic-card {
+    @apply bg-white rounded-3xl border border-white/40;
+    box-shadow: 8px 8px 16px #d1d5db, -8px -8px 16px #ffffff;
+  }
+
+  .neumorphic-button {
+    @apply bg-white rounded-2xl transition-all border border-gray-50 text-gray-700 font-bold flex items-center justify-center;
+    box-shadow: 8px 8px 16px #d1d5db, -8px -8px 16px #ffffff;
+    
+    &:active {
+      box-shadow: inset 8px 8px 16px #d1d5db, inset -8px -8px 16px #ffffff;
+    }
+  }
+
+  /* Scrollbar override for webkit */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    @apply bg-slate-300 rounded-full;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-slate-400;
+  }
+  
+  /* Hide scrollbar for clean UI elements */
+  .scrollbar-hide {
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+  }
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
 }
 
-html {
-  scroll-behavior: smooth;
-}
-
-body {
-  font-family: var(--font-inter);
-  background-color: var(--color-bg);
-  color: #1A1D26;
-  -webkit-font-smoothing: antialiased;
-}
-
-/* Scrollbar styling */
-::-webkit-scrollbar {
-  width: 4px;
-}
-::-webkit-scrollbar-track {
-  background: transparent;
-}
-::-webkit-scrollbar-thumb {
-  background: #CBD5E1;
-  border-radius: 4px;
-}
-
-/* Pulse animation for scanner */
-@keyframes scanLine {
-  0% { top: 10%; }
-  50% { top: 85%; }
-  100% { top: 10%; }
-}
-
-.scan-line {
-  animation: scanLine 2s ease-in-out infinite;
-}
-
+/* Animations */
 @keyframes pulse-ring {
-  0% { transform: scale(0.95); opacity: 0.8; }
-  70% { transform: scale(1.1); opacity: 0; }
-  100% { transform: scale(0.95); opacity: 0; }
+  0% {
+    transform: scale(0.8);
+    box-shadow: 0 0 0 0 rgba(0, 82, 255, 0.4);
+  }
+  70% {
+    transform: scale(1);
+    box-shadow: 0 0 0 15px rgba(0, 82, 255, 0);
+  }
+  100% {
+    transform: scale(0.8);
+    box-shadow: 0 0 0 0 rgba(0, 82, 255, 0);
+  }
 }
 
-.pulse-ring {
-  animation: pulse-ring 2s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+@keyframes scanLine {
+  0% { top: 0; opacity: 0; }
+  10% { opacity: 1; }
+  90% { opacity: 1; }
+  100% { top: 100%; opacity: 0; }
 }
 
-/* Gradient backgrounds */
-.gradient-hero {
-  background: linear-gradient(135deg, #0052FF 0%, #3374FF 50%, #0041CC 100%);
+@keyframes wave {
+  0% { transform: scaleY(0.4); }
+  50% { transform: scaleY(1.2); }
+  100% { transform: scaleY(0.4); }
 }
 
-.gradient-success {
-  background: linear-gradient(135deg, #00C48C 0%, #00A878 100%);
+.animate-wave {
+  animation: wave 1s ease-in-out infinite;
 }
-
-.gradient-danger {
-  background: linear-gradient(135deg, #FF2D55 0%, #CC1A3F 100%);
+.animate-wave-2 {
+  animation: wave 1s ease-in-out infinite 0.2s;
 }
-
-.gradient-warning {
-  background: linear-gradient(135deg, #FF9500 0%, #E67E00 100%);
+.animate-wave-3 {
+  animation: wave 1s ease-in-out infinite 0.4s;
 }
-
-/* Card shadows */
-.card-shadow {
-  box-shadow: 0 2px 20px rgba(0, 82, 255, 0.08);
+.animate-wave-4 {
+  animation: wave 1s ease-in-out infinite 0.1s;
 }
-
-.card-shadow-lg {
-  box-shadow: 0 8px 40px rgba(0, 82, 255, 0.12);
-}
-
-/* Glassmorphism */
-.glass {
-  background: rgba(255, 255, 255, 0.85);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-}
-
-/* Status badges */
-.badge-genuine {
-  background: linear-gradient(135deg, #E8FBF4, #C6F4E3);
-  color: #00A878;
-  border: 1px solid #00C48C33;
-}
-
-.badge-expired {
-  background: linear-gradient(135deg, #FFF4E0, #FFE4A8);
-  color: #E67E00;
-  border: 1px solid #FF950033;
-}
-
-.badge-counterfeit {
-  background: linear-gradient(135deg, #FFE8ED, #FFC2CC);
-  color: #CC1A3F;
-  border: 1px solid #FF2D5533;
-}
-
-/* Input focus styles */
-input:focus,
-textarea:focus {
-  outline: none;
-  border-color: var(--color-primary);
-  box-shadow: 0 0 0 3px rgba(0, 82, 255, 0.12);
-}
-
-/* Touch-friendly tap targets */
-button, a {
-  min-height: 44px;
+.animate-wave-5 {
+  animation: wave 1s ease-in-out infinite 0.3s;
 }
